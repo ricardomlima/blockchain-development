@@ -1,0 +1,14 @@
+version: "3.4"
+
+services:
+  app:
+    image: ricardomlima/blockchain-prototype
+    volumes:
+      - ./workplace:/home/
+    ports:
+      - "8888:8888"
+      - "5000:5000"
+    environment:
+      FLASK_APP: "app.py"
+
+    command: flask run --host=0.0.0.0
