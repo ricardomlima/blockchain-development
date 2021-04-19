@@ -14,10 +14,14 @@ class Blockchain:
         block = {
             'index': len(self.chain) + 1,
             'timestamp': str(datetime.datetime.now()),
-            'previous_hash': previous_hash
+            'previous_hash': previous_hash,
+            'proof': proof,
         }
         self.chain.append(block)
         return block
+
+    def get_previous_block(self):
+        return self.chain[-1]
 
     def proof_of_worf(self, previous_proof):
         new_proof = 1
