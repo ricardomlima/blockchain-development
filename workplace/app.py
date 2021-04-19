@@ -44,6 +44,11 @@ def mine_block():
     return jsonify(response), 200
 
 
+@app.route('/is_chain_valid')
+def is_chain_valid():
+    return jsonify(blockchain.is_chain_valid(blockchain.chain)), 200
+
+
 @app.route('/')
 def hello_world():
     return 'Hello, as!'
