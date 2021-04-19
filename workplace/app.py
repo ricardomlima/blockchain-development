@@ -7,6 +7,12 @@ app = Flask(__name__)
 blockchain = Blockchain()
 
 
+@app.route('/get_chain', methods=['GET'])
+def get_chain():
+    response = {'chain': blockchain.chain, 'length': len(blockchain.chain)}
+    return response, 200
+
+
 @app.route('/mine_block', methods=['GET'])
 def mine_block():
     previous_block = blockchain.get_previous_block()
