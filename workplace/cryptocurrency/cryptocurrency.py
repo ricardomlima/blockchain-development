@@ -2,7 +2,9 @@
 import datetime
 import hashlib  
 import json
+
 from flask import Flask
+from urllib.parse import urlparse
 
 
 class Blockchain:
@@ -11,6 +13,7 @@ class Blockchain:
         # A blockchain starts with zero transactions
         self.transactions = []
         self.create_block(proof=1, previous_hash='0')
+        self.nodes = set()
 
     def create_block(self, proof, previous_hash):
         block = {
@@ -69,3 +72,8 @@ class Blockchain:
         self.transactions.append({'sender': sender, 'receiver': receiver, 'amount': amount})
         previous_block = self.get_previous_block()
         return previous_block["index"] + 1
+
+    def add_node(self, address):
+        parsed_url = urlparse(address)
+        # netloc adds the address without the schema/protocol
+        self.nodes.add(parsed_url.netloc)
