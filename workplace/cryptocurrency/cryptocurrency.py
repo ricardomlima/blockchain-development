@@ -77,3 +77,32 @@ class Blockchain:
         parsed_url = urlparse(address)
         # netloc adds the address without the schema/protocol
         self.nodes.add(parsed_url.netloc)
+
+    def replace_chain(self):
+        """
+        Consensus implementation
+
+        Checking all nodes for longest and valid chain to replace
+        current chain.
+        """
+        network = self.nodes
+        longest_chain = None
+        max_length = len(self.chain)
+
+        for node in network:
+            response = requests.get(f'http://{node}/get_chain')
+            if response.status_code == 200:
+                response_json = response.json()
+                node_chain_length = response_json['length']
+                node_chain = response_json['chain']
+
+                if node_chain_length > max_length and self.is_chain_valid(node_chain):
+                    max_length =  length
+                    longest_chain = node_chain
+
+        if longest_chain:
+            self.chain = longest_chain
+            return True
+        return False
+
+
