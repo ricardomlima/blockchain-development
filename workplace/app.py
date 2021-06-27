@@ -1,8 +1,11 @@
+from uuid import uuid4
 from flask import Flask, jsonify
 
-from .creating_blockchain.blockchain import Blockchain
+from .cryptocurrency.cryptocurrency import Blockchain
 
 app = Flask(__name__)
+
+node_address = str(uuid4()).replace('-', '')
 
 blockchain = Blockchain()
 
@@ -31,14 +34,22 @@ def mine_block():
 
     # with a proof at hands now you are good to go on creating a new block
     previous_hash = blockchain.hash(previous_block)
-    block = blockchain.create_block(proof, previous_hash)
 
+    # Add a transaction to your wallet since you are going to mine the block!
+    blockchain.add_transaction(
+        sender=node_address,
+        receiver='Fernando',
+        amount=1
+    )
+
+    block = blockchain.create_block(proof, previous_hash)
     response = {
         'message': 'Congratulations on mining a new block!',
         'index': block['index'],
         'timestamp': block['timestamp'],
         'proof': block['proof'],
-        'previous_hash': block['previous_hash']
+        'previous_hash': block['previous_hash'],
+        'transactions': block['transactions']
     }
 
     return jsonify(response), 200
@@ -47,6 +58,21 @@ def mine_block():
 @app.route('/is_chain_valid')
 def is_chain_valid():
     return jsonify(blockchain.is_chain_valid(blockchain.chain)), 200
+
+
+@app.route('/add_transaction', methods=['POST'])
+def add_transaction():
+    json = request.get_json()
+    transaction_keys = ['sender', 'receiver', 'amount']
+    if not all(key in json for key in transaction_keys):
+        return 'Misising information elements', 400
+    index = blockchain.add_transaction(
+        json['sender'],
+        json['receiver'],
+        json['amount']
+    )
+    response = {'message': f'This transaction will be added to block {index}'}
+    return jsonify(response), 201
 
 
 @app.route('/')
