@@ -1,6 +1,7 @@
 
 import datetime
-import hashlib  
+import hashlib
+import requests
 import json
 
 from flask import Flask
@@ -69,7 +70,8 @@ class Blockchain:
         return True
 
     def add_transaction(self, sender, receiver, amount):
-        self.transactions.append({'sender': sender, 'receiver': receiver, 'amount': amount})
+        self.transactions.append(
+            {'sender': sender, 'receiver': receiver, 'amount': amount})
         previous_block = self.get_previous_block()
         return previous_block["index"] + 1
 
@@ -97,12 +99,10 @@ class Blockchain:
                 node_chain = response_json['chain']
 
                 if node_chain_length > max_length and self.is_chain_valid(node_chain):
-                    max_length =  length
+                    max_length = node_chain_length
                     longest_chain = node_chain
 
         if longest_chain:
             self.chain = longest_chain
             return True
         return False
-
-
