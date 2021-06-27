@@ -1,5 +1,5 @@
 from uuid import uuid4
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 from .cryptocurrency.cryptocurrency import Blockchain
 
@@ -72,6 +72,21 @@ def add_transaction():
         json['amount']
     )
     response = {'message': f'This transaction will be added to block {index}'}
+    return jsonify(response), 201
+
+
+@app.route('/connect_node', methods=['POST'])
+def connect_node():
+    json = request.get_json()
+    nodes = json.get('nodes')
+    if nodes is None:
+        return 'Empty', 400
+    for node in nodes:
+        blockchain.add_node(node)
+    response = {
+        "message": "All following nodes connected:",
+        "total_node": list(blockchain.nodes)
+    }
     return jsonify(response), 201
 
 
