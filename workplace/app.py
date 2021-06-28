@@ -1,3 +1,4 @@
+import os
 from uuid import uuid4
 from flask import Flask, jsonify, request
 
@@ -8,6 +9,8 @@ app = Flask(__name__)
 node_address = str(uuid4()).replace('-', '')
 
 blockchain = Blockchain()
+
+miner = os.getenv('MINER')
 
 
 @app.route('/get_chain', methods=['GET'])
@@ -38,7 +41,7 @@ def mine_block():
     # Add a transaction to your wallet since you are going to mine the block!
     blockchain.add_transaction(
         sender=node_address,
-        receiver='Fernando',
+        receiver=miner,
         amount=1
     )
 
