@@ -7,7 +7,7 @@
 
 
 // version
-pragma solidity ^0.4.11
+pragma solidity ^0.4.11;
 
 contract hadcoin_ico {
     // max number of hadcoins available in ICO
@@ -18,5 +18,9 @@ contract hadcoin_ico {
 
     // total hadcoins bought by investors
     uint public total_hadcoins_bought = 0;
+
+    // equivalence functions
+    mapping(address => uint) equity_hadcoins;
+    mapping(address => uint) equity_usd;
 
 }
