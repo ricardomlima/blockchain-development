@@ -7,7 +7,7 @@
 
 
 // version
-pragma solidity ^0.4.11
+pragma solidity ^0.4.11;
 
 contract hadcoin_ico {
     // max number of hadcoins available in ICO
@@ -41,7 +41,7 @@ contract hadcoin_ico {
     }
 
     // buying hadcoins
-    function buy_hadcoins(address investor, uint usd) external
+    function buy_hadcoins(address investor, uint usd_invested) external
     can_buy_hadcoins(usd_invested) {
         uint hadcoins_bought = usd_invested * usd_to_hadcoins;
         equity_hadcoins[investor] += hadcoins_bought;
@@ -52,6 +52,6 @@ contract hadcoin_ico {
     function sell_hadcoins(address investor, uint hadcoins_sold) external {
         equity_hadcoins[investor] -= hadcoins_sold;
         equity_usd[investor] = equity_hadcoins[investor] / 1000;
-        total_hadcoins_bought -= hadcoins_bought;
+        total_hadcoins_bought -= hadcoins_sold;
     }
 }
