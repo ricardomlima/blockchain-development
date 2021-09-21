@@ -24,9 +24,20 @@ contract hadcoin_ico {
     mapping(address => uint) equity_usd;
 
     // checking if investor can buy hadcoins
+    // modifiers can only be accessed by functions
     modifier can_buy_hadcoins(uint usd_invested) {
         require (usd_invested * usd_to_hadcoins + total_hadcoins_bought <= max_hadcoins);
         _;
+    }
+
+    // returns investment value in hadcoins
+    function equity_in_hadcoins(address investor) external constant returns(uint) {
+        return equity_hadcoins[investor];
+    }
+
+    // returns investment value in dollars
+    function equity_in_usd(address investor) external constant returns(uint) {
+        return equity_usd[investor];
     }
 
 }
